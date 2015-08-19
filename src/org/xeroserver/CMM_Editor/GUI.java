@@ -18,6 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 public class GUI extends JFrame {
@@ -27,7 +28,7 @@ public class GUI extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextArea editor_area;
+	private JTextPane editor_area;
 	private JTextArea console_area;
 
 	/**
@@ -61,13 +62,22 @@ public class GUI extends JFrame {
 		});
 		mnSave.add(mntmSave);
 		
-		JMenuItem mntmVisualize = new JMenuItem("Visualize (Shift-V)");
+		JMenuItem mntmVisualize = new JMenuItem("Visualize (Strg-E)");
 		mntmVisualize.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Editor.visualizeRequest = true;
 			}
 		});
 		mnSave.add(mntmVisualize);
+		
+		JMenuItem mntmRunstrgr = new JMenuItem("Run (Strg-R)");
+		mntmRunstrgr.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Editor.run();
+				
+			}
+		});
+		mnSave.add(mntmRunstrgr);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -76,7 +86,9 @@ public class GUI extends JFrame {
 		JScrollPane editor_scroll = new JScrollPane();
 		contentPane.add(editor_scroll, BorderLayout.CENTER);
 		
-		editor_area = new JTextArea();
+		editor_area = new JTextPane();
+		
+		
 		editor_area.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -93,13 +105,18 @@ public class GUI extends JFrame {
 					else if(e.getKeyCode() ==  KeyEvent.VK_E)
 					{
 						Editor.visualizeRequest = true;
+					}else if(e.getKeyCode() ==  KeyEvent.VK_R)
+					{
+						Editor.run();
 					}
 
 				}
 			}
 		});
-		editor_area.setTabSize(2);
 		editor_area.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		
+		
 		editor_scroll.setViewportView(editor_area);
 		
 		JScrollPane console_scroll = new JScrollPane();
@@ -115,7 +132,7 @@ public class GUI extends JFrame {
 		setVisible(true);
 	}
 	
-	public JTextArea getEditorArea() {
+	public JTextPane getEditorArea() {
 		return editor_area;
 	}
 	public JTextArea getConsoleArea() {

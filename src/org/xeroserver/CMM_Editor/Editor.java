@@ -12,14 +12,22 @@ import java.util.TimerTask;
 
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import org.xeroserver.cmm.CMM_Frontend;
+
+import com.oracle.truffle.api.CallTarget;
+import com.oracle.truffle.api.Truffle;
+import com.oracle.truffle.api.frame.FrameDescriptor;
+import com.oracle.truffle.cmm.TreeConverter;
+import com.oracle.truffle.cmm.nodes.function.FunctionRootNode;
+import com.oracle.truffle.cmm.parser.Node;
 
 public class Editor {
 	
@@ -27,7 +35,22 @@ public class Editor {
 	private static File file = new File(".", "test.cmm");
 	public static boolean visualizeRequest = false;
 	private static boolean hasErrors = false;
+	private static Node mainNode = null;
+	
+	public static Highlighter.HighlightPainter myHighlightPainter = new MyHighlightPainter(new Color(238,130,238));
 
+
+	public static void run()
+	{
+		System.out.println("Running " + file.getName() + "...");
+		
+		FrameDescriptor desc = FrameDescriptor.create();
+		TreeConverter converter = new TreeConverter();
+		FunctionRootNode root = converter.buildTruffleTree(mainNode, desc);
+		CallTarget call = Truffle.getRuntime().createCallTarget(root);
+		call.call();
+		
+	}
 	
 	public static void open(File f)
 	{
@@ -76,10 +99,102 @@ public class Editor {
 				save();
 				
 				checkErrors();
+				
+				colorTypes();
+
 			}
 			
 		}, 0, 250);
 		
+	}
+	
+	public static void highlight(String pattern)
+	{
+	    // First remove all old highlights
+
+		JTextPane textComp = gui.getEditorArea();
+
+	    try
+	    {
+	        Highlighter hilite = textComp.getHighlighter();
+	        
+	        Document doc = textComp.getDocument();
+	        String text = doc.getText(0, doc.getLength());
+	        int pos = 0;
+
+	        while ((pos = text.indexOf(pattern, pos)) >= 0)
+	        {
+	            hilite.addHighlight(pos, pos+pattern.length(), myHighlightPainter);
+	            pos += pattern.length();
+	        }
+	    } catch (BadLocationException e) {
+	    }
+	}
+	
+	public static void removeHighlights()
+	{
+		JTextPane textComp = gui.getEditorArea();
+	    Highlighter hilite = textComp.getHighlighter();
+	    Highlighter.Highlight[] hilites = hilite.getHighlights();
+	    for (int i=0; i<hilites.length; i++)
+	    {
+	        if (hilites[i].getPainter() instanceof MyHighlightPainter)
+	        {
+	            hilite.removeHighlight(hilites[i]);
+	        }
+	    }
+	}
+
+	// An instance of the private subclass of the default highlight painter
+	
+
+	// A private subclass of the default highlight painter
+
+	
+	public static void colorTypes()
+	{
+		removeHighlights();
+
+
+		setHighlightColor(new Color(238,130,238));
+
+		
+		highlight("int ");
+		highlight("double ");
+		highlight("float ");
+		highlight("bool ");
+		highlight("void ");
+		highlight("char ");
+		highlight("string ");
+		
+		highlight(" int ");
+		highlight(" double ");
+		highlight(" float ");
+		highlight(" bool ");
+		highlight(" void ");
+		highlight(" char ");
+		highlight(" string ");
+
+
+		setHighlightColor(Color.GREEN);
+
+		highlight("const ");
+		
+		
+		setHighlightColor(Color.YELLOW);
+		highlight("print(");
+		highlight("read()");
+		highlight("readLine()");
+
+
+
+
+		
+		
+
+
+		
+	     
 	}
 	
 	public static void save()
@@ -98,6 +213,11 @@ public class Editor {
 		catch(Exception e){e.printStackTrace();}
 	}
 	
+	public static void setHighlightColor (Color c)
+	{
+		 myHighlightPainter = new MyHighlightPainter(c);
+	}
+	
 	public static void checkErrors()
 	{
 		CMM_Frontend front = new CMM_Frontend(file);
@@ -108,18 +228,18 @@ public class Editor {
 			
 		}catch(Exception e){}
 	
-		JTextArea textArea = gui.getEditorArea();
+		JTextPane textArea = gui.getEditorArea();
 
 
-	  Highlighter highlighter = textArea.getHighlighter();
+		Highlighter highlighter = textArea.getHighlighter();
       
   
 		
 		if(front.getErrorCount() != 0)
 		{
 			hasErrors = true;
-		    HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.pink);
-
+		    HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+		    
 			HashMap<Integer,String> errors = front.getErrorList();
 			
 			for(Integer line : errors.keySet())
@@ -127,8 +247,8 @@ public class Editor {
 				line--;
 			    
 			      try {
-			    		 int p0 = textArea.getLineStartOffset(line);
-					      int p1 = textArea.getLineEndOffset(line);
+			    		 int p0 = textArea.getDocument().getDefaultRootElement().getElement(line).getStartOffset();
+					      int p1 = textArea.getDocument().getDefaultRootElement().getElement(line).getEndOffset();
 					      					      
 					highlighter.addHighlight(p0, p1, painter);
 				} catch (Exception e) {
@@ -141,7 +261,7 @@ public class Editor {
 			String cosoleContent = "Found " + front.getErrorCount() + " errors:" + "\n" ;
 			 for(String err : errors.values())
 		     {
-				 cosoleContent += err;
+				 cosoleContent += err + "\n";
 		     }
 			 
 			 gui.getConsoleArea().setText(cosoleContent);
@@ -149,6 +269,9 @@ public class Editor {
 		
 		else
 		{
+			//setWorkingMainTree
+			mainNode = front.getMainNode();
+			
 			//Update once
 			if(hasErrors)
 			{
