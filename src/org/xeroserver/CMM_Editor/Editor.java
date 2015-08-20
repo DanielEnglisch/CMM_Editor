@@ -33,6 +33,7 @@ public class Editor {
 	public static boolean visualizeRequest = false;
 	private static boolean hasErrors = false;
 	private static Node mainNode = null;
+	private static CMM_Frontend frontend = null;
 
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
@@ -41,7 +42,7 @@ public class Editor {
 
 	public static void run() {
 
-		Thread th = new Thread(new Program(mainNode, file.getName()));
+		Thread th = new Thread(new Program(mainNode, file.getName(), frontend.getParser()));
 		th.start();
 
 	}
@@ -123,9 +124,6 @@ public class Editor {
 		}
 	}
 
-	// An instance of the private subclass of the default highlight painter
-
-	// A private subclass of the default highlight painter
 
 	public static void colorTypes() {
 		removeHighlights();
@@ -179,7 +177,9 @@ public class Editor {
 	}
 
 	public static void checkErrors() {
+		
 		CMM_Frontend front = new CMM_Frontend(file);
+		frontend = front;
 
 		try {
 			front.parse();
@@ -193,6 +193,7 @@ public class Editor {
 
 		if (front.getErrorCount() != 0) {
 			hasErrors = true;
+			
 			HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
 
 			HashMap<Integer, String> errors = front.getErrorList();

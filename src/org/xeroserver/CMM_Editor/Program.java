@@ -21,19 +21,23 @@ import javax.swing.SwingUtilities;
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.Truffle;
 import com.oracle.truffle.api.frame.FrameDescriptor;
+import com.oracle.truffle.cmm.CMMRuntime;
 import com.oracle.truffle.cmm.TreeConverter;
 import com.oracle.truffle.cmm.nodes.function.FunctionRootNode;
 import com.oracle.truffle.cmm.parser.Node;
+import com.oracle.truffle.cmm.parser.Parser;
 
 public class Program implements Runnable {
 
 	private JFrame cons = null;
 	private Node mainNode = null;
 	private String title = "TITLE";
+	private Parser parser = null;
 
-	public Program(Node mn, String t) {
+	public Program(Node mn, String t, Parser p) {
 		this.title = t;
 		this.mainNode = mn;
+		this.parser = p;
 
 		cons = new JFrame(title);
 		cons.setSize(600, 300);
@@ -80,6 +84,7 @@ public class Program implements Runnable {
 		cons.setVisible(true);
 
 		FrameDescriptor desc = FrameDescriptor.create();
+		CMMRuntime.initialize(parser, desc);
 		TreeConverter converter = new TreeConverter();
 		FunctionRootNode root = converter.buildTruffleTree(mainNode, desc);
 		CallTarget call = Truffle.getRuntime().createCallTarget(root);
