@@ -18,10 +18,11 @@ import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
+import org.xeroserver.CMM_Editor.GUI.GUI;
+import org.xeroserver.CMM_Editor.SynCol.TypeHighlighter;
 import org.xeroserver.cmm.CMM_Frontend;
 
 import com.oracle.truffle.cmm.parser.Node;
@@ -37,8 +38,9 @@ public class Editor {
 
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
+	
+	public static String version = "0.5";
 
-	public static Highlighter.HighlightPainter myHighlightPainter = new MyHighlightPainter(new Color(238, 130, 238));
 
 	public static void run() {
 
@@ -85,7 +87,7 @@ public class Editor {
 
 				checkErrors();
 
-				colorTypes();
+				TypeHighlighter.colorTypes(gui.getEditorArea());
 
 			}
 
@@ -93,69 +95,7 @@ public class Editor {
 
 	}
 
-	public static void highlight(String pattern) {
-		// First remove all old highlights
 
-		JTextPane textComp = gui.getEditorArea();
-
-		try {
-			Highlighter hilite = textComp.getHighlighter();
-
-			Document doc = textComp.getDocument();
-			String text = doc.getText(0, doc.getLength());
-			int pos = 0;
-
-			while ((pos = text.indexOf(pattern, pos)) >= 0) {
-				hilite.addHighlight(pos, pos + pattern.length(), myHighlightPainter);
-				pos += pattern.length();
-			}
-		} catch (BadLocationException e) {
-		}
-	}
-
-	public static void removeHighlights() {
-		JTextPane textComp = gui.getEditorArea();
-		Highlighter hilite = textComp.getHighlighter();
-		Highlighter.Highlight[] hilites = hilite.getHighlights();
-		for (int i = 0; i < hilites.length; i++) {
-			if (hilites[i].getPainter() instanceof MyHighlightPainter) {
-				hilite.removeHighlight(hilites[i]);
-			}
-		}
-	}
-
-
-	public static void colorTypes() {
-		removeHighlights();
-
-		setHighlightColor(new Color(238, 130, 238));
-
-		highlight("int ");
-		highlight("double ");
-		highlight("float ");
-		highlight("bool ");
-		highlight("void ");
-		highlight("char ");
-		highlight("string ");
-
-		highlight(" int ");
-		highlight(" double ");
-		highlight(" float ");
-		highlight(" bool ");
-		highlight(" void ");
-		highlight(" char ");
-		highlight(" string ");
-
-		setHighlightColor(Color.GREEN);
-
-		highlight("const ");
-
-		setHighlightColor(Color.YELLOW);
-		highlight("print(");
-		highlight("read()");
-		highlight("readLine()");
-
-	}
 
 	public static void save() {
 		String content = gui.getEditorArea().getText();
@@ -172,9 +112,7 @@ public class Editor {
 		}
 	}
 
-	public static void setHighlightColor(Color c) {
-		myHighlightPainter = new MyHighlightPainter(c);
-	}
+
 
 	public static void checkErrors() {
 		
@@ -232,7 +170,6 @@ public class Editor {
 			}
 
 			if (visualizeRequest) {
-				if (!hasErrors) {
 					JList<String> list = new JList<String>();
 					String[] arr = new String[front.getProcedures().size()];
 
@@ -246,20 +183,17 @@ public class Editor {
 					String name = list.getSelectedValue();
 
 					front.visualize(name);
-				} else {
-					JOptionPane.showMessageDialog(null, "Please fix all errors before visualizing!");
-				}
+					
 
 				visualizeRequest = false;
 			}
 
+		
 		}
 	}
 
 }
 
-class MyHighlightPainter extends DefaultHighlighter.DefaultHighlightPainter {
-	public MyHighlightPainter(Color color) {
-		super(color);
-	}
-}
+
+
+

@@ -1,7 +1,6 @@
-package org.xeroserver.CMM_Editor;
+package org.xeroserver.CMM_Editor.GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,8 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.URL;
 
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -21,40 +21,82 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
+
+import org.xeroserver.CMM_Editor.Editor;
 
 public class GUI extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextPane editor_area;
 	private JTextArea console_area;
 	
-	public int currentOffset = 0;
+	private TextLineNumber lineView = null;
+	private boolean showLineNumbers = true;
+	private boolean showConsole = true;
 
-	/**
-	 * Create the frame.
-	 */
+	
+
 	public GUI() {
 
-		setTitle("C-- Editor");
+		setTitle("C-- Editor v. " + Editor.version);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 699, 560);
 		setLocationRelativeTo(null);
 
+		
+		URL iconURL = getClass().getResource("/x0.png");
+		// iconURL is null when not found
+		ImageIcon icon = new ImageIcon(iconURL);
+		setIconImage(icon.getImage());
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		JMenu mnSave = new JMenu("File");
-		menuBar.add(mnSave);
-		//menuBar.add(new JButton("TEST"));
+		JMenu menu_file = new JMenu("File");
+		menuBar.add(menu_file);
+		
+		JMenu menu_window = new JMenu("Window");
+		menuBar.add(menu_window);
+		
+		JMenuItem mi_toggleline = new JMenuItem("Hide line numbers");
+		mi_toggleline.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				toggleLineView();
+				
+				if(showLineNumbers)
+				{
+					mi_toggleline.setText("Hide line numbers");
+				}else
+				{
+					mi_toggleline.setText("Show line numbers");
+				}
+
+				
+			}
+		});
+		menu_window.add(mi_toggleline);
+		
+		JMenuItem mi_toggleconsole = new JMenuItem("Hide console");
+		mi_toggleconsole.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				toggleConsole();
+				
+				if(showConsole)
+				{
+					mi_toggleconsole.setText("Hide console");
+				}else
+				{
+					mi_toggleconsole.setText("Show console");
+				}
+
+				
+			}
+		});
+		menu_window.add(mi_toggleconsole);
+		
 
 		JMenuItem mntmOpen = new JMenuItem("Open (Strg-O)");
 		mntmOpen.addActionListener(new ActionListener() {
@@ -62,7 +104,7 @@ public class GUI extends JFrame {
 				open();
 			}
 		});
-		mnSave.add(mntmOpen);
+		menu_file.add(mntmOpen);
 
 		JMenuItem mntmSave = new JMenuItem("Save (Strg-S)");
 		mntmSave.addActionListener(new ActionListener() {
@@ -70,7 +112,7 @@ public class GUI extends JFrame {
 				save();
 			}
 		});
-		mnSave.add(mntmSave);
+		menu_file.add(mntmSave);
 
 		JMenuItem mntmVisualize = new JMenuItem("Visualize (Strg-E)");
 		mntmVisualize.addActionListener(new ActionListener() {
@@ -78,7 +120,7 @@ public class GUI extends JFrame {
 				Editor.visualizeRequest = true;
 			}
 		});
-		mnSave.add(mntmVisualize);
+		menu_file.add(mntmVisualize);
 
 		JMenuItem mntmRunstrgr = new JMenuItem("Run (Strg-R)");
 		mntmRunstrgr.addActionListener(new ActionListener() {
@@ -87,7 +129,7 @@ public class GUI extends JFrame {
 
 			}
 		});
-		mnSave.add(mntmRunstrgr);
+		menu_file.add(mntmRunstrgr);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -127,8 +169,8 @@ public class GUI extends JFrame {
 		
 
 
-		TextLineNumber tln = new TextLineNumber(editor_area);
-		editor_scroll.setRowHeaderView( tln );
+		lineView = new TextLineNumber(editor_area);
+		editor_scroll.setRowHeaderView( lineView );
 		
 		editor_scroll.setViewportView(editor_area);
 
@@ -145,6 +187,44 @@ public class GUI extends JFrame {
 		contentPane.add(console_scroll, BorderLayout.SOUTH);
 
 		setVisible(true);
+	}
+	
+	private void toggleLineView()
+	{
+		if(showLineNumbers)
+		{
+			lineView.hide();
+		}
+		else
+		{
+			lineView.show();
+
+		}
+		
+		showLineNumbers = !showLineNumbers;
+	}
+	
+	private void toggleConsole()
+	{
+		if(showConsole)
+		{
+			console_area.setPreferredSize(new Dimension(0,0));
+			console_area.setSize(0,0);
+			console_area.repaint();
+			setSize(getWidth(),getHeight()+1);
+			setSize(getWidth(),getHeight()-1);
+
+		}
+		else
+		{
+			console_area.setPreferredSize(
+					new Dimension((int) console_area.getSize().getWidth(), (int) console_area.getSize().getHeight() + 100));
+			setSize(getWidth(),getHeight()+1);
+			setSize(getWidth(),getHeight()-1);
+
+
+		}
+		showConsole = !showConsole;
 	}
 
 	public JTextPane getEditorArea() {
@@ -181,98 +261,3 @@ public class GUI extends JFrame {
 }
 
 
-class TypeColorizer
-{
-	private static int bufferState = 0;
-	
-	private static int INT = 0;
-	
-	public static void check(KeyEvent e, JTextPane pane)
-	{
-		char c = e.getKeyChar();
-		
-		if(bufferState == 0 && c == 'i')
-		{
-			bufferState++;
-		}else
-			if(bufferState == 1 && c == 'n')
-			{
-				bufferState++;
-			}else
-				if(bufferState == 2 && c == 't')
-				{
-					colorize(INT,pane, pane.getCaretPosition());
-				}else
-				{
-					bufferState = 0;
-					colorize(e.getKeyChar(), pane.getCaretPosition(), pane);
-				}
-		
-		
-	}
-	
-	private static void colorize(char c, int loc, JTextPane pane)
-	{
-		StyledDocument document = pane.getStyledDocument();
-		StyleContext context = new StyleContext();
-		
-		// build a style
-		Style styleBLACK = context.addStyle("c_black", null);
-
-		// set some style properties
-		StyleConstants.setForeground(styleBLACK, Color.BLACK);
-		StyleConstants.setFontFamily(styleBLACK, "Arial");
-		StyleConstants.setFontSize(styleBLACK, 24);
-
-
-		// add some data to the document
-		
-		pane.setLogicalStyle(styleBLACK);
-		pane.addStyle("black", styleBLACK);
-		
-		try {
-			document.insertString(loc, ""+c, styleBLACK);
-			System.out.println("inserted black: " + c);
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			document.remove(loc, 1);
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private static void colorize(int type, JTextPane pane, int loc)
-	{
-		StyledDocument document = pane.getStyledDocument();
-		StyleContext context = new StyleContext();
-		
-		// build a style
-		Style styleRED = context.addStyle("c_red", null);
-
-		// set some style properties
-		StyleConstants.setForeground(styleRED, Color.RED);
-
-		// add some data to the document
-		try {
-			document.insertString(loc-2, "int", styleRED);
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			document.remove(loc, 3);
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-	}
-}

@@ -1,4 +1,4 @@
-package org.xeroserver.CMM_Editor;
+package org.xeroserver.CMM_Editor.GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -55,7 +55,7 @@ public class TextLineNumber extends JPanel
 
 	//  Text component this TextTextLineNumber component is in sync with
 
-	private JTextComponent component;
+	public JTextComponent component;
 
 	//  Properties that can be changed
 
@@ -71,6 +71,8 @@ public class TextLineNumber extends JPanel
     private int lastDigits;
     private int lastHeight;
     private int lastLine;
+    
+    private Dimension preferedDimension = null;
 
 	private HashMap<String, FontMetrics> fonts;
 
@@ -154,6 +156,7 @@ public class TextLineNumber extends JPanel
 		setBorder( new CompoundBorder(OUTER, inner) );
 		lastDigits = 0;
 		setPreferredWidth();
+		preferedDimension = getPreferredSize();
 	}
 
 	/**
@@ -210,6 +213,21 @@ public class TextLineNumber extends JPanel
 	public int getMinimumDisplayDigits()
 	{
 		return minimumDisplayDigits;
+	}
+	
+	
+	public void hide()
+	{
+		setPreferredSize(new Dimension(0,0));
+		setSize(0,0);
+	}
+	
+	public void show()
+	{
+		setPreferredSize(preferedDimension);
+		setSize(preferedDimension);
+		setPreferredWidth();
+		this.setBorderGap(3);
 	}
 
 	/**

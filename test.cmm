@@ -1,7 +1,4 @@
 void Main(){
 
-	int i;
-	print("dd");
-	const double d = 2.2;
 
 }
