@@ -30,7 +30,7 @@ import com.oracle.truffle.cmm.parser.Node;
 public class Editor {
 
 	private static GUI gui = null;
-	private static File file = new File(".", "test.cmm");
+	private static File file = new File(System.getProperty("user.home"), "tmp.cmm");
 	public static boolean visualizeRequest = false;
 	private static boolean hasErrors = false;
 	private static Node mainNode = null;
@@ -39,7 +39,7 @@ public class Editor {
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
 
-	public static String version = "0.5";
+	public static String version = "0.7";
 
 	public static void run() {
 
@@ -73,6 +73,14 @@ public class Editor {
 
 	public static void main(String[] args) throws BadLocationException {
 
+		//Updater
+		Updater up = new Updater();
+		
+		if(up.isUpdateAvailable())
+		{
+			JOptionPane.showMessageDialog(null, "There is an update available! \n xeroserver.org/6m5hln");
+		}
+		
 		gui = new GUI();
 
 		gui.getEditorArea().setText("void Main(){" + "\n\n\n" + "}");

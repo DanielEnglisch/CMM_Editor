@@ -16,8 +16,10 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
@@ -52,6 +54,9 @@ public class GUI extends JFrame {
 
 		JMenu menu_file = new JMenu("File");
 		menuBar.add(menu_file);
+		
+		JMenu menu_actions= new JMenu("Actions");
+		menuBar.add(menu_actions);
 
 		JMenu menu_window = new JMenu("Window");
 		menuBar.add(menu_window);
@@ -103,6 +108,17 @@ public class GUI extends JFrame {
 			}
 		});
 		menu_file.add(mntmSave);
+		
+		menu_file.add(new JSeparator());
+		
+		JMenuItem mi_about = new JMenuItem("About");
+		mi_about.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(null, "C-- Editor with its AST Visualizer and Parser Frontend (Coco/r) developed by Daniel 'Xer0' Englisch. \n Backend developed by Jürger Kerbl with the Oracle's Truffle Framework.\n xeroserver.org");
+			}
+		});
+		menu_file.add(mi_about);
 
 		JMenuItem mntmVisualize = new JMenuItem("Visualize (Strg-E)");
 		mntmVisualize.addActionListener(new ActionListener() {
@@ -110,7 +126,7 @@ public class GUI extends JFrame {
 				Editor.visualizeRequest = true;
 			}
 		});
-		menu_file.add(mntmVisualize);
+		menu_actions.add(mntmVisualize);
 
 		JMenuItem mntmRunstrgr = new JMenuItem("Run (Strg-R)");
 		mntmRunstrgr.addActionListener(new ActionListener() {
@@ -119,7 +135,7 @@ public class GUI extends JFrame {
 
 			}
 		});
-		menu_file.add(mntmRunstrgr);
+		menu_actions.add(mntmRunstrgr);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
