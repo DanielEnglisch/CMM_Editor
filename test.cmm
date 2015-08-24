@@ -1,13 +1,4 @@
 void Main(){
-printLine("calc...");
-int i;
-i = 2;
 
-if(i == 2)
-{
-	i  = 22;
-}
-
-printLine(i);
 
 }
