@@ -58,7 +58,6 @@ public class Program implements Runnable {
 		JTextArea area = new JTextArea();
 		TextAreaOutputStream taOutputStream = new TextAreaOutputStream(area);
 
-		
 		area.setFont(new Font("Arial", Font.PLAIN, 20));
 
 		System.setOut(new PrintStream(taOutputStream));
@@ -92,13 +91,12 @@ public class Program implements Runnable {
 		closeProgram();
 
 	}
-	
-	private void closeProgram()
-	{
+
+	private void closeProgram() {
 
 		System.setOut(Editor.stdout);
 		System.setIn(Editor.stdin);
-		
+
 		Thread.currentThread().interrupt();
 	}
 

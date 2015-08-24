@@ -30,12 +30,10 @@ public class GUI extends JFrame {
 	private JPanel contentPane;
 	private JTextPane editor_area;
 	private JTextArea console_area;
-	
+
 	private TextLineNumber lineView = null;
 	private boolean showLineNumbers = true;
 	private boolean showConsole = true;
-
-	
 
 	public GUI() {
 
@@ -44,59 +42,51 @@ public class GUI extends JFrame {
 		setBounds(100, 100, 699, 560);
 		setLocationRelativeTo(null);
 
-		
 		URL iconURL = getClass().getResource("/x0.png");
 		// iconURL is null when not found
 		ImageIcon icon = new ImageIcon(iconURL);
 		setIconImage(icon.getImage());
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
 		JMenu menu_file = new JMenu("File");
 		menuBar.add(menu_file);
-		
+
 		JMenu menu_window = new JMenu("Window");
 		menuBar.add(menu_window);
-		
+
 		JMenuItem mi_toggleline = new JMenuItem("Hide line numbers");
 		mi_toggleline.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				toggleLineView();
-				
-				if(showLineNumbers)
-				{
+
+				if (showLineNumbers) {
 					mi_toggleline.setText("Hide line numbers");
-				}else
-				{
+				} else {
 					mi_toggleline.setText("Show line numbers");
 				}
 
-				
 			}
 		});
 		menu_window.add(mi_toggleline);
-		
+
 		JMenuItem mi_toggleconsole = new JMenuItem("Hide console");
 		mi_toggleconsole.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				toggleConsole();
-				
-				if(showConsole)
-				{
+
+				if (showConsole) {
 					mi_toggleconsole.setText("Hide console");
-				}else
-				{
+				} else {
 					mi_toggleconsole.setText("Show console");
 				}
 
-				
 			}
 		});
 		menu_window.add(mi_toggleconsole);
-		
 
 		JMenuItem mntmOpen = new JMenuItem("Open (Strg-O)");
 		mntmOpen.addActionListener(new ActionListener() {
@@ -156,22 +146,17 @@ public class GUI extends JFrame {
 					}
 
 				}
-				
-				//TypeColorizer.check(e, editor_area);
-				
-				
-			}
-			
 
-			
+				// TypeColorizer.check(e, editor_area);
+
+			}
+
 		});
 		editor_area.setFont(new Font("Arial", Font.PLAIN, 20));
-		
-
 
 		lineView = new TextLineNumber(editor_area);
-		editor_scroll.setRowHeaderView( lineView );
-		
+		editor_scroll.setRowHeaderView(lineView);
+
 		editor_scroll.setViewportView(editor_area);
 
 		JScrollPane console_scroll = new JScrollPane();
@@ -188,40 +173,31 @@ public class GUI extends JFrame {
 
 		setVisible(true);
 	}
-	
-	private void toggleLineView()
-	{
-		if(showLineNumbers)
-		{
+
+	private void toggleLineView() {
+		if (showLineNumbers) {
 			lineView.hide();
-		}
-		else
-		{
+		} else {
 			lineView.show();
 
 		}
-		
+
 		showLineNumbers = !showLineNumbers;
 	}
-	
-	private void toggleConsole()
-	{
-		if(showConsole)
-		{
-			console_area.setPreferredSize(new Dimension(0,0));
-			console_area.setSize(0,0);
+
+	private void toggleConsole() {
+		if (showConsole) {
+			console_area.setPreferredSize(new Dimension(0, 0));
+			console_area.setSize(0, 0);
 			console_area.repaint();
-			setSize(getWidth(),getHeight()+1);
-			setSize(getWidth(),getHeight()-1);
+			setSize(getWidth(), getHeight() + 1);
+			setSize(getWidth(), getHeight() - 1);
 
-		}
-		else
-		{
-			console_area.setPreferredSize(
-					new Dimension((int) console_area.getSize().getWidth(), (int) console_area.getSize().getHeight() + 100));
-			setSize(getWidth(),getHeight()+1);
-			setSize(getWidth(),getHeight()-1);
-
+		} else {
+			console_area.setPreferredSize(new Dimension((int) console_area.getSize().getWidth(),
+					(int) console_area.getSize().getHeight() + 100));
+			setSize(getWidth(), getHeight() + 1);
+			setSize(getWidth(), getHeight() - 1);
 
 		}
 		showConsole = !showConsole;
@@ -259,5 +235,3 @@ public class GUI extends JFrame {
 	}
 
 }
-
-

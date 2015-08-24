@@ -38,9 +38,8 @@ public class Editor {
 
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
-	
-	public static String version = "0.5";
 
+	public static String version = "0.5";
 
 	public static void run() {
 
@@ -95,8 +94,6 @@ public class Editor {
 
 	}
 
-
-
 	public static void save() {
 		String content = gui.getEditorArea().getText();
 
@@ -112,10 +109,8 @@ public class Editor {
 		}
 	}
 
-
-
 	public static void checkErrors() {
-		
+
 		CMM_Frontend front = new CMM_Frontend(file);
 		frontend = front;
 
@@ -131,7 +126,7 @@ public class Editor {
 
 		if (front.getErrorCount() != 0) {
 			hasErrors = true;
-			
+
 			HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
 
 			HashMap<Integer, String> errors = front.getErrorList();
@@ -170,30 +165,24 @@ public class Editor {
 			}
 
 			if (visualizeRequest) {
-					JList<String> list = new JList<String>();
-					String[] arr = new String[front.getProcedures().size()];
+				JList<String> list = new JList<String>();
+				String[] arr = new String[front.getProcedures().size()];
 
-					list.setListData(front.getProcedures().toArray(arr));
+				list.setListData(front.getProcedures().toArray(arr));
 
-					list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-					list.setSelectedIndex(0);
+				list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				list.setSelectedIndex(0);
 
-					JOptionPane.showMessageDialog(null, list, "Select Procedure", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, list, "Select Procedure", JOptionPane.PLAIN_MESSAGE);
 
-					String name = list.getSelectedValue();
+				String name = list.getSelectedValue();
 
-					front.visualize(name);
-					
+				front.visualize(name);
 
 				visualizeRequest = false;
 			}
 
-		
 		}
 	}
 
 }
-
-
-
-
