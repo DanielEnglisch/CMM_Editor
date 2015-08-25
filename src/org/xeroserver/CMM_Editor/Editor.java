@@ -39,7 +39,7 @@ public class Editor {
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
 
-	public static String version = "0.7";
+	public static String version = "0.85";
 
 	public static void run() {
 
@@ -71,16 +71,36 @@ public class Editor {
 		file = f;
 	}
 
+	private static void updater() {
+		Updater up = new Updater();
+
+		if (up.isUpdateAvailable()) {
+			Object[] options = { "Yes", "No" };
+			int n = JOptionPane.showOptionDialog(null, "There is an update available! Do you want to download it?",
+					"Updater", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+			if (n == 0) {
+				boolean success = up.downloadUpdate();
+
+				if (success) {
+					JOptionPane.showMessageDialog(null, "Successfully applied update! Please restart the program!");
+
+					System.exit(0);
+
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Update failed! Check your internet connection and try again later!");
+				}
+			}
+
+		}
+	}
+
 	public static void main(String[] args) throws BadLocationException {
 
-		//Updater
-		Updater up = new Updater();
-		
-		if(up.isUpdateAvailable())
-		{
-			JOptionPane.showMessageDialog(null, "There is an update available! \n xeroserver.org/6m5hln");
-		}
-		
+		// Updater
+		updater();
+
 		gui = new GUI();
 
 		gui.getEditorArea().setText("void Main(){" + "\n\n\n" + "}");

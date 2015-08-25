@@ -54,8 +54,8 @@ public class GUI extends JFrame {
 
 		JMenu menu_file = new JMenu("File");
 		menuBar.add(menu_file);
-		
-		JMenu menu_actions= new JMenu("Actions");
+
+		JMenu menu_actions = new JMenu("Actions");
 		menuBar.add(menu_actions);
 
 		JMenu menu_window = new JMenu("Window");
@@ -108,14 +108,15 @@ public class GUI extends JFrame {
 			}
 		});
 		menu_file.add(mntmSave);
-		
+
 		menu_file.add(new JSeparator());
-		
+
 		JMenuItem mi_about = new JMenuItem("About");
 		mi_about.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				JOptionPane.showMessageDialog(null, "C-- Editor with its AST Visualizer and Parser Frontend (Coco/r) developed by Daniel 'Xer0' Englisch. \n Backend developed by Jürger Kerbl with the Oracle's Truffle Framework.\n xeroserver.org");
+
+				JOptionPane.showMessageDialog(null,
+						"C-- Editor with its AST Visualizer and Parser Frontend (using Coco/R [http://www.ssw.uni-linz.ac.at/Coco/]) developed by Daniel 'Xer0' Englisch. \n Backend developed by Jürger Kerbl with the Oracle's Truffle Framework [http://ssw.jku.at/Research/Projects/JVM/Truffle.html].");
 			}
 		});
 		menu_file.add(mi_about);
