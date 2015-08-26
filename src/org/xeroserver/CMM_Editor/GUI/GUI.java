@@ -23,6 +23,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BadLocationException;
 
 import org.xeroserver.CMM_Editor.Editor;
 import org.xeroserver.CMM_Editor.SynCol.EditorDoc;
@@ -33,6 +34,8 @@ public class GUI extends JFrame {
 	private JPanel contentPane;
 	private JTextPane editor_area;
 	private JTextArea console_area;
+	
+	private JMenu recentsMenu = null;
 
 	private TextLineNumber lineView = null;
 	private boolean showLineNumbers = true;
@@ -101,7 +104,15 @@ public class GUI extends JFrame {
 			}
 		});
 		menu_file.add(mntmOpen);
+		
+		recentsMenu = new JMenu("Open recent");
+		
+		updateRecents();
+		
+		menu_file.add(recentsMenu);
+		
 
+		
 		JMenuItem mntmSave = new JMenuItem("Save (Strg-S)");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -164,8 +175,19 @@ public class GUI extends JFrame {
 					}
 
 				}
+				
+				if(e.getKeyCode() == KeyEvent.VK_TAB)
+				{
+					e.consume();
+					
+					try {
+						
+						editor_area.getDocument().insertString(editor_area.getCaretPosition(), "      ",null);
+					} catch (BadLocationException e1) {
+						e1.printStackTrace();
+					}
+				}
 
-				// TypeColorizer.check(e, editor_area);
 
 			}
 
@@ -190,6 +212,24 @@ public class GUI extends JFrame {
 		contentPane.add(console_scroll, BorderLayout.SOUTH);
 
 		setVisible(true);
+	}
+	
+	public void updateRecents()
+	{
+		recentsMenu.removeAll();
+		
+		for(File f : Editor.recentFiles)
+		{
+			JMenuItem i = new JMenuItem(f.getName());
+			i.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Editor.open(f);
+				}
+			});
+			
+			recentsMenu.add(i);
+			
+		}
 	}
 
 	private void toggleLineView() {
