@@ -35,16 +35,16 @@ import com.oracle.truffle.cmm.parser.Node;
 public class Editor {
 
 	private static GUI gui = null;
-	
-	//FILESYS
+
+	// FILESYS
 	private static File dir = new File(System.getProperty("user.home") + "\\CMM-Editor");
 	private static File file = new File(dir, "tmp.cmm");
 	private static File recentFile = new File(dir, "recents.data");
-	
+
 	public static ArrayList<File> recentFiles = new ArrayList<File>();
 
-	//--------
-	
+	// --------
+
 	public static boolean visualizeRequest = false;
 	private static boolean hasErrors = false;
 	private static Node mainNode = null;
@@ -56,7 +56,6 @@ public class Editor {
 	public static String version = "0.94";
 
 	private static int ms_parseDely = 500;
-	
 
 	public static void run() {
 
@@ -84,77 +83,62 @@ public class Editor {
 
 		gui.getEditorArea().setText(contents);
 		setSave(f);
-		
-		if(!recentFiles.contains(f))
-		{
-			
-			if(recentFiles.size() >= 5)
-			{
+
+		if (!recentFiles.contains(f)) {
+
+			if (recentFiles.size() >= 5) {
 				System.out.println("Removing first recent");
 				recentFiles.remove(0);
 			}
-			
+
 			recentFiles.add(f);
 			gui.updateRecents();
 			saveRecents();
 		}
-	
+
 	}
-	
-	private static void saveRecents()
-	{
-		
-		try
-		{
+
+	private static void saveRecents() {
+
+		try {
 			FileOutputStream out = new FileOutputStream(recentFile);
-	        ObjectOutputStream oout = new ObjectOutputStream(out);
+			ObjectOutputStream oout = new ObjectOutputStream(out);
 
-	         oout.writeObject(recentFiles);
+			oout.writeObject(recentFiles);
 
-	         oout.close();
-		}
-		catch(Exception ex)
-		{
+			oout.close();
+		} catch (Exception ex) {
 			System.out.println("Faild to save recents!");
 		}
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private static ArrayList<File> loadRecents()
-	{
+	private static ArrayList<File> loadRecents() {
 
-		if(recentFile.exists())
-		{
-			try
-			{
-				 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(recentFile));
-				 ArrayList<File> list = (ArrayList<File>) ois.readObject();
-				 ois.close();
-				 
-				 return list;
+		if (recentFile.exists()) {
+			try {
+				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(recentFile));
+				ArrayList<File> list = (ArrayList<File>) ois.readObject();
+				ois.close();
 
-			}
-			catch(Exception ex)
-			{
+				return list;
+
+			} catch (Exception ex) {
 				System.out.println("Failed to load recents!");
 				ex.printStackTrace();
 			}
-			
-		}else
-		{
+
+		} else {
 			try {
 				recentFile.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		
+
 		return new ArrayList<File>();
 	}
-	
-	
 
 	public static void setSave(File f) {
 		file = f;
@@ -187,13 +171,13 @@ public class Editor {
 
 	public static void main(String[] args) throws BadLocationException {
 
-		//Creats folder in home folder:
+		// Creats folder in home folder:
 		dir.mkdirs();
-		
+
 		// Updater
 		updater();
-		
-		//Load Recents:
+
+		// Load Recents:
 		recentFiles = loadRecents();
 
 		gui = new GUI();

@@ -34,7 +34,7 @@ public class GUI extends JFrame {
 	private JPanel contentPane;
 	private JTextPane editor_area;
 	private JTextArea console_area;
-	
+
 	private JMenu recentsMenu = null;
 
 	private TextLineNumber lineView = null;
@@ -104,15 +104,13 @@ public class GUI extends JFrame {
 			}
 		});
 		menu_file.add(mntmOpen);
-		
-		recentsMenu = new JMenu("Open recent");
-		
-		updateRecents();
-		
-		menu_file.add(recentsMenu);
-		
 
-		
+		recentsMenu = new JMenu("Open recent");
+
+		updateRecents();
+
+		menu_file.add(recentsMenu);
+
 		JMenuItem mntmSave = new JMenuItem("Save (Strg-S)");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -175,19 +173,17 @@ public class GUI extends JFrame {
 					}
 
 				}
-				
-				if(e.getKeyCode() == KeyEvent.VK_TAB)
-				{
+
+				if (e.getKeyCode() == KeyEvent.VK_TAB) {
 					e.consume();
-					
+
 					try {
-						
-						editor_area.getDocument().insertString(editor_area.getCaretPosition(), "      ",null);
+
+						editor_area.getDocument().insertString(editor_area.getCaretPosition(), "      ", null);
 					} catch (BadLocationException e1) {
 						e1.printStackTrace();
 					}
 				}
-
 
 			}
 
@@ -213,22 +209,20 @@ public class GUI extends JFrame {
 
 		setVisible(true);
 	}
-	
-	public void updateRecents()
-	{
+
+	public void updateRecents() {
 		recentsMenu.removeAll();
-		
-		for(File f : Editor.recentFiles)
-		{
+
+		for (File f : Editor.recentFiles) {
 			JMenuItem i = new JMenuItem(f.getName());
 			i.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					Editor.open(f);
 				}
 			});
-			
+
 			recentsMenu.add(i);
-			
+
 		}
 	}
 
