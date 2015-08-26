@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.Truffle;
@@ -60,7 +59,10 @@ public class Program implements Runnable {
 
 		area.setFont(new Font("Arial", Font.PLAIN, 20));
 
-		System.setOut(new PrintStream(taOutputStream));
+		PrintStream newOut = new PrintStream(taOutputStream);
+
+		System.setOut(newOut);
+		System.setErr(newOut);
 
 		cons.setLayout(new BorderLayout());
 		area.setEditable(false);
@@ -95,6 +97,7 @@ public class Program implements Runnable {
 	private void closeProgram() {
 
 		System.setOut(Editor.stdout);
+		System.setErr(Editor.stdout);
 		System.setIn(Editor.stdin);
 
 		Thread.currentThread().interrupt();
@@ -149,37 +152,15 @@ class TextFieldStreamer extends InputStream implements ActionListener {
 class TextAreaOutputStream extends OutputStream {
 
 	private final JTextArea textArea;
-	private final StringBuilder sb = new StringBuilder();
 
 	public TextAreaOutputStream(final JTextArea textArea) {
 		this.textArea = textArea;
 	}
 
 	@Override
-	public void flush() {
-	}
-
-	@Override
-	public void close() {
-	}
-
-	@Override
 	public void write(int b) throws IOException {
 
-		if (b == '\r')
-			return;
+		textArea.append((char) b + "");
 
-		if (b == '\n') {
-			final String text = sb.toString() + "\n";
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					textArea.append(text);
-				}
-			});
-			sb.setLength(0);
-			return;
-		}
-
-		sb.append((char) b);
 	}
 }

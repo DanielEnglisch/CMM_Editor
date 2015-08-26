@@ -22,7 +22,6 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import org.xeroserver.CMM_Editor.GUI.GUI;
-import org.xeroserver.CMM_Editor.SynCol.TypeHighlighter;
 import org.xeroserver.cmm.CMM_Frontend;
 
 import com.oracle.truffle.cmm.parser.Node;
@@ -39,10 +38,14 @@ public class Editor {
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
 
-	public static String version = "0.85";
+	public static String version = "0.93";
+
+	private static int ms_parseDely = 500;
 
 	public static void run() {
 
+		if (hasErrors)
+			return;
 		Thread th = new Thread(new Program(mainNode, file.getName(), frontend.getParser()));
 		th.start();
 
@@ -114,11 +117,11 @@ public class Editor {
 
 				checkErrors();
 
-				TypeHighlighter.colorTypes(gui.getEditorArea());
+				// TypeHighlighter.colorTypes(gui.getEditorArea());
 
 			}
 
-		}, 0, 250);
+		}, 0, ms_parseDely);
 
 	}
 

@@ -25,6 +25,7 @@ import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 import org.xeroserver.CMM_Editor.Editor;
+import org.xeroserver.CMM_Editor.SynCol.EditorDoc;
 
 public class GUI extends JFrame {
 
@@ -116,7 +117,7 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				JOptionPane.showMessageDialog(null,
-						"C-- Editor with its AST Visualizer and Parser Frontend (using Coco/R [http://www.ssw.uni-linz.ac.at/Coco/]) developed by Daniel 'Xer0' Englisch. \n Backend developed by Jürger Kerbl with the Oracle's Truffle Framework [http://ssw.jku.at/Research/Projects/JVM/Truffle.html].");
+						"C-- Editor with its AST Visualizer and Parser Frontend (using Coco/R [http://www.ssw.uni-linz.ac.at/Coco/]) developed by Daniel 'Xer0' Englisch. \n Backend developed by Jürger Kerbl using Oracle's Truffle Framework [http://ssw.jku.at/Research/Projects/JVM/Truffle.html].");
 			}
 		});
 		menu_file.add(mi_about);
@@ -145,7 +146,7 @@ public class GUI extends JFrame {
 		JScrollPane editor_scroll = new JScrollPane();
 		contentPane.add(editor_scroll, BorderLayout.CENTER);
 
-		editor_area = new JTextPane();
+		editor_area = new JTextPane(new EditorDoc());
 
 		editor_area.addKeyListener(new KeyAdapter() {
 			@Override
