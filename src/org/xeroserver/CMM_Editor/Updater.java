@@ -22,27 +22,16 @@ public class Updater {
 	private String localChecksum = "local";
 	private String remoteChecksum = "remote";
 
-	private boolean offline = false;
 
 	public Updater() {
 
-		if (!isOnline()) {
-			offline = true;
-			System.out.println("Host is offline...");
-		}
-
-		else {
-
 			localChecksum = getLocalChecksum();
 			remoteChecksum = getRemoteChecksum();
-		}
 
 	}
 
 	public boolean downloadUpdate() {
 
-		if (offline)
-			return false;
 
 		try {
 			URL website = new URL(downloadFile);
@@ -51,7 +40,7 @@ public class Updater {
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 			fos.close();
 		} catch (Exception ex) {
-
+			ex.printStackTrace();
 			return false;
 
 		}
@@ -60,23 +49,9 @@ public class Updater {
 
 	}
 
-	public boolean isOnline() {
-
-		try {
-			URL url = new URL("http://www.google.com");
-			HttpURLConnection urlConnect = (HttpURLConnection) url.openConnection();
-			urlConnect.getContent();
-
-		} catch (Exception e) {
-			return false;
-		}
-
-		return true;
-	}
 
 	public boolean isUpdateAvailable() {
-		if (offline)
-			return false;
+		
 
 		return !localChecksum.equals(remoteChecksum);
 	}
@@ -100,6 +75,7 @@ public class Updater {
 			in.close();
 
 		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 		return res;
@@ -140,6 +116,7 @@ public class Updater {
 			fis.close();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return res;
