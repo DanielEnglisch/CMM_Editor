@@ -32,6 +32,8 @@ import org.xeroserver.cmm.CMM_Frontend;
 
 import com.oracle.truffle.cmm.parser.Node;
 
+import at.xer0.x0_Library.net.AppUpdater;
+
 public class Editor {
 
 	private static GUI gui = null;
@@ -53,7 +55,7 @@ public class Editor {
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
 
-	public static String version = "0.94";
+	public static String version = "0.95";
 
 	private static int ms_parseDely = 500;
 
@@ -67,6 +69,21 @@ public class Editor {
 	}
 
 	public static void open(File f) {
+		
+		if(!f.exists())
+		{
+			JOptionPane.showMessageDialog(null, "File not found!");
+			
+			if(recentFiles.contains(f))
+			{
+				recentFiles.remove(f);
+				gui.updateRecents();
+				saveRecents();
+			}
+			
+			return;
+		}
+		
 		String contents = "";
 
 		BufferedReader in = null;
@@ -83,7 +100,13 @@ public class Editor {
 
 		gui.getEditorArea().setText(contents);
 		setSave(f);
+		addToRecents(f);
+		
 
+	}
+	
+	private static void addToRecents(File f)
+	{
 		if (!recentFiles.contains(f)) {
 
 			if (recentFiles.size() >= 5) {
@@ -95,7 +118,6 @@ public class Editor {
 			gui.updateRecents();
 			saveRecents();
 		}
-
 	}
 
 	private static void saveRecents() {
@@ -144,38 +166,18 @@ public class Editor {
 		file = f;
 	}
 
-	private static void updater() {
-		Updater up = new Updater();
-
-		if (up.isUpdateAvailable()) {
-			Object[] options = { "Yes", "No" };
-			int n = JOptionPane.showOptionDialog(null, "There is an update available! Do you want to download it?",
-					"Updater", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-			if (n == 0) {
-				boolean success = up.downloadUpdate();
-
-				if (success) {
-					JOptionPane.showMessageDialog(null, "Successfully applied update! Please restart the program!");
-
-					System.exit(0);
-
-				} else {
-					JOptionPane.showMessageDialog(null,
-							"Update failed! Check your internet connection and try again later!");
-				}
-			}
-
-		}
-	}
-
+	
 	public static void main(String[] args) throws BadLocationException {
 
 		// Creats folder in home folder:
 		dir.mkdirs();
 
 		// Updater
-		updater();
+		AppUpdater up = new AppUpdater	(	"http://xeroserver.org/api/cmm/cs_editor.php",
+											"http://xeroserver.org/api/cmm/CMM_Editor.jar",
+											"CMM_Editor.jar"	
+										);
+		up.checkForUpdate();
 
 		// Load Recents:
 		recentFiles = loadRecents();
@@ -233,8 +235,10 @@ public class Editor {
 
 		if (front.getErrorCount() != 0) {
 			hasErrors = true;
-
-			HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+			
+			
+			
+			HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(new Color(255,90,90));
 
 			HashMap<Integer, String> errors = front.getErrorList();
 
@@ -290,6 +294,8 @@ public class Editor {
 			}
 
 		}
+		
+		gui.indicator.updateErrorCount(front.getErrorCount());
 	}
 
 }

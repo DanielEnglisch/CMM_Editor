@@ -52,6 +52,8 @@ public class Program implements Runnable {
 
 			}
 		};
+		
+		
 		cons.addWindowListener(exitListener);
 
 		JTextArea area = new JTextArea();

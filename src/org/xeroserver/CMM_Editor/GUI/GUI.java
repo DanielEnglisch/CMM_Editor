@@ -40,6 +40,8 @@ public class GUI extends JFrame {
 	private TextLineNumber lineView = null;
 	private boolean showLineNumbers = true;
 	private boolean showConsole = true;
+	
+	public MenuIndicator indicator = null;
 
 	public GUI() {
 
@@ -49,12 +51,13 @@ public class GUI extends JFrame {
 		setLocationRelativeTo(null);
 
 		URL iconURL = getClass().getResource("/x0.png");
-		// iconURL is null when not found
 		ImageIcon icon = new ImageIcon(iconURL);
 		setIconImage(icon.getImage());
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+		
+		
 
 		JMenu menu_file = new JMenu("File");
 		menuBar.add(menu_file);
@@ -147,6 +150,10 @@ public class GUI extends JFrame {
 			}
 		});
 		menu_actions.add(mntmRunstrgr);
+		
+		indicator = new MenuIndicator();
+		//menuBar.add(indicator);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
