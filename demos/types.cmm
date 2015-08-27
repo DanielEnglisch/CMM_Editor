@@ -1,0 +1,54 @@
+void Main(){
+
+	const int ci = 22;
+	const double cd = 20232;
+	const float cf = 0.35f;
+	const char cc = 'c';
+	const string cs = "String";
+	const bool cb = true;
+
+	int i;
+	double d;
+	float f;
+	char c;
+	string s;
+	bool b;
+
+	
+	int[1] ai;
+	double[1200] ad;
+	float[3] af;
+	char[4] ac;
+	string[5] as;
+	bool[6] ab;	
+
+	i = (int)d;
+	d = (double) f;
+	f = (float) i;
+	s = (string)ac;
+
+            s = (string)i;
+            s = (string)f;
+            s = (string)d;
+            
+            i = (int)s;
+            d = (double)s;
+            f = (float)s;
+            
+
+	if(i == 1){}
+	else{}
+
+	for(i = 0; i== 100;i = i+1;){}
+
+	while(b == false){}
+
+	c = read();
+	s = readln();
+	
+	print(c);
+	println(s);
+
+	i = length(s);
+
+}

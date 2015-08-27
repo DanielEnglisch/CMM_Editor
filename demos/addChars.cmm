@@ -1,0 +1,44 @@
+
+
+int input()
+{
+
+int x;
+	char c;
+	c = read();
+		
+     println(c);
+	
+x = (int)c;
+
+if(c == 'x')
+{
+	x = -1;
+}
+
+return x;
+}
+
+void Main(){
+
+int i,x;
+i = 0;
+x = 0;
+
+string s;
+
+while(1==1)
+{
+	
+	x= input();
+	if(x == -1)
+	{
+		println(i);
+	}else
+	{
+		i = i+x;
+	}
+}
+
+
+}

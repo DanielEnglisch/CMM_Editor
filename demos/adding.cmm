@@ -1,0 +1,38 @@
+bool close;
+
+void addIt()
+{
+	string a,b;
+
+	println("Enter two numbers: ");
+
+	print("> ");
+	a = readln();
+	
+	print(">");
+	b = readln();
+
+	println("Adding " + a + " " + b + " gives you " + (a+b));
+
+	print("Again? > ");
+	string answer;
+
+	answer = readln();
+
+	if(answer != "yes")
+	{
+		close = true;
+	}
+	
+}
+
+void Main(){
+
+	while(close == false)
+	{
+	 	addIt();
+	}
+
+	println("Closing...");
+
+}

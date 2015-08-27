@@ -1,0 +1,69 @@
+
+int getAge(int year)
+{
+	return 2015 - year;
+}
+
+string getMonth(int id)
+{
+	string res;
+	 if(id == 1)
+	{
+		res = "Jaenner";
+	}else if(id == 2)
+	{
+		res = "Februar";
+	}else
+	if(id == 3)
+	{
+		res = "Maerz";
+	}else
+	if(id == 4)
+	{
+		res = "April";
+	}else
+	if(id == 5)
+	{
+		res = "Mai";
+	}else
+	if(id == 6)
+	{
+		res = "Juni";
+	}else
+	if(id == 7)
+	{
+		res = "Juli";
+	}else
+	if(id == 8)
+	{
+		res = "August";
+	}else
+	if(id == 9)
+	{
+		res = "September";
+	}else
+	if(id == 10)
+	{
+		res = "Oktober";
+	}else
+	if(id == 11)
+	{
+		res = "November";
+	}else
+	if(id == 12)
+	{
+		res = "Dezember";
+	}else
+	{
+	res = "?";
+	}
+
+	return res;
+}
+
+void Main()
+{
+
+	printLine(getAge(1996));
+	printLine(getMonth(12));
+}
