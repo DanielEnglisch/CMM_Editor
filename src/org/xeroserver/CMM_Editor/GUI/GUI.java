@@ -129,7 +129,12 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				JOptionPane.showMessageDialog(null,
-						"C-- Editor with its AST Visualizer and Parser Frontend (using Coco/R [http://www.ssw.uni-linz.ac.at/Coco/]) developed by Daniel 'Xer0' Englisch. \n Backend developed by Jürger Kerbl using Oracle's Truffle Framework [http://ssw.jku.at/Research/Projects/JVM/Truffle.html].");
+							"Editor, AST-Visualizer and C-- compiler frontend developed by Daniel 'Xer0' Englisch."
+						+ 	"\n"
+						+ 	"Compiler backend developed by Juergen Kerbl."
+						+ 	"\n\n"
+						+ 	"For more information visit: xeroserver.org"
+						);
 			}
 		});
 		menu_file.add(mi_about);
