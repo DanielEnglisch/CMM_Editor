@@ -55,7 +55,7 @@ public class Editor {
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
 
-	public static String version = "0.95";
+	public static String version = "0.98";
 
 	private static int ms_parseDely = 500;
 

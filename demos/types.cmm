@@ -14,7 +14,6 @@ void Main(){
 	string s;
 	bool b;
 
-	
 	int[1] ai;
 	double[1200] ad;
 	float[3] af;
@@ -35,7 +34,6 @@ void Main(){
             d = (double)s;
             f = (float)s;
             
-
 	if(i == 1){}
 	else{}
 
@@ -46,6 +44,7 @@ void Main(){
 	c = read();
 	s = readln();
 	
+            //I'm a comment
 	print(c);
 	println(s);
 

@@ -17,7 +17,7 @@ void addIt()
 	print("Again? > ");
 	string answer;
 
-	answer = readln();
+	andswer = readln();
 
 	if(answer != "yes")
 	{
