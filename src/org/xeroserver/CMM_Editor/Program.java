@@ -92,6 +92,9 @@ public class Program implements Runnable {
 		FunctionRootNode root = converter.buildTruffleTree(mainNode, desc);
 		CallTarget call = Truffle.getRuntime().createCallTarget(root);
 		call.call();
+		
+			
+		
 		closeProgram();
 
 	}

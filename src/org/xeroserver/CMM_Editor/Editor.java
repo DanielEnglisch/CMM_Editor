@@ -29,10 +29,9 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 import org.xeroserver.CMM_Editor.GUI.GUI;
 import org.xeroserver.cmm.CMM_Frontend;
+import org.xeroserver.x0_Library.net.AppUpdater;
 
 import com.oracle.truffle.cmm.parser.Node;
-
-import at.xer0.x0_Library.net.AppUpdater;
 
 public class Editor {
 
@@ -55,7 +54,7 @@ public class Editor {
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
 
-	public static String version = "0.98";
+	public static String version = "0.99";
 
 	private static int ms_parseDely = 500;
 
