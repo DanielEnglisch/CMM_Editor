@@ -93,7 +93,6 @@ public class Program implements Runnable {
 		CallTarget call = Truffle.getRuntime().createCallTarget(root);
 		call.call();
 		
-			
 		
 		closeProgram();
 
