@@ -52,8 +52,7 @@ public class Program implements Runnable {
 
 			}
 		};
-		
-		
+
 		cons.addWindowListener(exitListener);
 
 		JTextArea area = new JTextArea();
@@ -92,8 +91,7 @@ public class Program implements Runnable {
 		FunctionRootNode root = converter.buildTruffleTree(mainNode, desc);
 		CallTarget call = Truffle.getRuntime().createCallTarget(root);
 		call.call();
-		
-		
+
 		closeProgram();
 
 	}

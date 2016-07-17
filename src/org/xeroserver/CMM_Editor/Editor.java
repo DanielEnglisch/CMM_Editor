@@ -29,7 +29,7 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 import org.xeroserver.CMM_Editor.GUI.GUI;
 import org.xeroserver.cmm.CMM_Frontend;
-import org.xeroserver.x0_Library.net.AppUpdater;
+import org.xeroserver.x0library.net.AppUpdater;
 
 import com.oracle.truffle.cmm.parser.Node;
 
@@ -54,7 +54,7 @@ public class Editor {
 	public static PrintStream stdout = System.out;
 	public static InputStream stdin = System.in;
 
-	public static String version = "0.99";
+	public static String version = "0.99a";
 
 	private static int ms_parseDely = 500;
 
@@ -68,21 +68,19 @@ public class Editor {
 	}
 
 	public static void open(File f) {
-		
-		if(!f.exists())
-		{
+
+		if (!f.exists()) {
 			JOptionPane.showMessageDialog(null, "File not found!");
-			
-			if(recentFiles.contains(f))
-			{
+
+			if (recentFiles.contains(f)) {
 				recentFiles.remove(f);
 				gui.updateRecents();
 				saveRecents();
 			}
-			
+
 			return;
 		}
-		
+
 		String contents = "";
 
 		BufferedReader in = null;
@@ -100,12 +98,10 @@ public class Editor {
 		gui.getEditorArea().setText(contents);
 		setSave(f);
 		addToRecents(f);
-		
 
 	}
-	
-	private static void addToRecents(File f)
-	{
+
+	private static void addToRecents(File f) {
 		if (!recentFiles.contains(f)) {
 
 			if (recentFiles.size() >= 5) {
@@ -165,18 +161,16 @@ public class Editor {
 		file = f;
 	}
 
-	
 	public static void main(String[] args) throws BadLocationException {
 
 		// Creats folder in home folder:
 		dir.mkdirs();
 
 		// Updater
-		AppUpdater up = new AppUpdater	(	"http://xeroserver.org/api/cmm/cs_editor.php",
-											"http://xeroserver.org/api/cmm/CMM_Editor.jar",
-											"CMM_Editor.jar"	
-										);
-		up.checkForUpdate();
+		AppUpdater up = new AppUpdater("http://xeroserver.org/api/cmm/updater.php");
+		if (up.isUpdateAvailable())
+			up.showUpdateDialog("C-- Editor Updater", "There is an update available! Do you want to download it?",
+					"Updated successfully!", "There was an error updating!");
 
 		// Load Recents:
 		recentFiles = loadRecents();
@@ -234,10 +228,8 @@ public class Editor {
 
 		if (front.getErrorCount() != 0) {
 			hasErrors = true;
-			
-			
-			
-			HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(new Color(255,90,90));
+
+			HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 90, 90));
 
 			HashMap<Integer, String> errors = front.getErrorList();
 
@@ -293,7 +285,7 @@ public class Editor {
 			}
 
 		}
-		
+
 		gui.indicator.updateErrorCount(front.getErrorCount());
 	}
 

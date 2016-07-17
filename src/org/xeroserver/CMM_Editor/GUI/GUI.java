@@ -40,7 +40,7 @@ public class GUI extends JFrame {
 	private TextLineNumber lineView = null;
 	private boolean showLineNumbers = true;
 	private boolean showConsole = true;
-	
+
 	public MenuIndicator indicator = null;
 
 	public GUI() {
@@ -56,8 +56,6 @@ public class GUI extends JFrame {
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
-		
 
 		JMenu menu_file = new JMenu("File");
 		menuBar.add(menu_file);
@@ -129,12 +127,9 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				JOptionPane.showMessageDialog(null,
-							"Editor, AST-Visualizer and C-- compiler frontend developed by Daniel 'Xer0' Englisch."
-						+ 	"\n"
-						+ 	"Compiler backend developed by Juergen Kerbl."
-						+ 	"\n\n"
-						+ 	"For more information visit: xeroserver.org"
-						);
+						"Editor, AST-Visualizer and C-- compiler frontend developed by Daniel 'Xer0' Englisch." + "\n"
+								+ "Compiler backend developed by Juergen Kerbl." + "\n\n"
+								+ "For more information visit: xeroserver.org");
 			}
 		});
 		menu_file.add(mi_about);
@@ -155,10 +150,10 @@ public class GUI extends JFrame {
 			}
 		});
 		menu_actions.add(mntmRunstrgr);
-		
+
 		indicator = new MenuIndicator();
-		//menuBar.add(indicator);
-		
+		// menuBar.add(indicator);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
