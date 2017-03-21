@@ -1,3 +1,4 @@
 # C - - Editor
 
-Please visit the official project page [here](http://xeroserver.org/cmm.php).
+## Download
+[Latest Release](https://github.com/DanielEnglisch/CMM_Editor/releases/latest)
